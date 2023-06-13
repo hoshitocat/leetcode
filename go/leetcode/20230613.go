@@ -2,7 +2,6 @@ package leetcode
 
 import (
 	"fmt"
-	"strconv"
 )
 
 func Run20230613() {
@@ -36,23 +35,22 @@ func Run20230613() {
 }
 
 func equalPairs(grid [][]int) int {
-	rows := make([]string, len(grid))
-	columns := map[string]int{}
-	var sameCount int
-
-	for i := range grid {
-		var row string
-		var column string
-		for j := range grid {
-			row += strconv.Itoa(grid[i][j]) + "|"
-			column += strconv.Itoa(grid[j][i]) + "|"
-		}
-		rows[i] = row
-		columns[column]++
+	n := len(grid)
+	mapping := make(map[[200]int]int)
+	arr := [200]int{}
+	for i := 0; i < n; i++ {
+		copy(arr[:], grid[i])
+		mapping[arr]++
 	}
 
-	for _, row := range rows {
-		count, ok := columns[row]
+	var sameCount int
+	for i := 0; i < n; i++ {
+		arr := [200]int{}
+		for j := 0; j < n; j++ {
+			arr[j] = grid[j][i]
+		}
+
+		count, ok := mapping[arr]
 		if ok {
 			sameCount += count
 		}
