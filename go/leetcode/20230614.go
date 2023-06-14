@@ -2,12 +2,9 @@ package leetcode
 
 import (
 	"math"
-	"sort"
 
 	"github.com/davecgh/go-spew/spew"
 )
-
-//[1,0,48,null,null,12,49]
 
 func Run20230614() {
 	root := &TreeNode{
@@ -29,7 +26,6 @@ func Run20230614() {
 	}
 
 	spew.Dump(getMinimumDifference(root))
-	spew.Dump(nums)
 }
 
 /**
@@ -47,37 +43,37 @@ type TreeNode struct {
 	Right *TreeNode
 }
 
-var nums = make([]int, 0, 10_000)
-
 func getMinimumDifference(root *TreeNode) int {
-	getNodeValue(root)
-	sort.Slice(nums, func(i, j int) bool { return nums[i] < nums[j] })
+	_, _, diff := getMinDiffFromBST(root)
+	return diff
+}
 
-	// default
-	min := 100_000
-	for i := 0; i < len(nums)-1; i++ {
-		diff := intDiff(nums[i], nums[i+1])
+func getMinDiffFromBST(node *TreeNode) (int, int, int) {
+	min, max, diff := node.Val, node.Val, math.MaxInt32
 
-		if diff < min {
-			min = diff
+	if node.Left != nil {
+		lmin, lmax, ldiff := getMinDiffFromBST(node.Left)
+		min = lmin
+		if tmpDiff := node.Val - lmax; tmpDiff < diff {
+			diff = tmpDiff
+		}
+
+		if ldiff < diff {
+			diff = ldiff
 		}
 	}
 
-	return min
-}
+	if node.Right != nil {
+		rmin, rmax, rdiff := getMinDiffFromBST(node.Right)
+		max = rmax
+		if tmpDiff := rmin - node.Val; tmpDiff < diff {
+			diff = tmpDiff
+		}
 
-func getNodeValue(current *TreeNode) {
-	if current == nil {
-		return
+		if rdiff < diff {
+			diff = rdiff
+		}
 	}
 
-	nums = append(nums, current.Val)
-	getNodeValue(current.Left)
-	getNodeValue(current.Right)
-
-	return
-}
-
-func intDiff(x, y int) int {
-	return int(math.Abs(float64(x - y)))
+	return min, max, diff
 }
