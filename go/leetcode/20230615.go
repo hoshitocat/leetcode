@@ -2,6 +2,7 @@ package leetcode
 
 import (
 	"fmt"
+	"math"
 )
 
 func Run20230615() {
@@ -69,26 +70,37 @@ func Run20230615() {
 }
 
 func maxLevelSum(root *TreeNode) int {
-	values := map[int]int{}
-	sumValuesWithDepth(values, root, 1)
+	level := 0
+	minLevel := 0
+	maxValue := math.MinInt64
+	queue := []*TreeNode{root}
 
-	maxDepth := 1
-	maxValue := root.Val
-	for depth, value := range values {
-		if maxValue < value {
-			maxDepth = depth
-			maxValue = value
+	for len(queue) > 0 {
+		level++
+		currentSum := 0
+		n := len(queue)
+
+		for n > 0 {
+			node := queue[0]
+			queue = queue[1:]
+			currentSum += node.Val
+
+			if node.Left != nil {
+				queue = append(queue, node.Left)
+			}
+
+			if node.Right != nil {
+				queue = append(queue, node.Right)
+			}
+
+			n--
+		}
+
+		if maxValue < currentSum {
+			maxValue = currentSum
+			minLevel = level
 		}
 	}
 
-	return maxDepth
-}
-
-func sumValuesWithDepth(values map[int]int, node *TreeNode, depth int) {
-	if node == nil {
-		return
-	}
-	values[depth] += node.Val
-	sumValuesWithDepth(values, node.Left, depth+1)
-	sumValuesWithDepth(values, node.Right, depth+1)
+	return minLevel
 }
