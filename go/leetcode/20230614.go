@@ -37,12 +37,6 @@ func Run20230614() {
  * }
  */
 
-type TreeNode struct {
-	Val   int
-	Left  *TreeNode
-	Right *TreeNode
-}
-
 func getMinimumDifference(root *TreeNode) int {
 	_, _, diff := getMinDiffFromBST(root)
 	return diff
