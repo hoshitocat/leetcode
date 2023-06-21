@@ -50,9 +50,15 @@ func Run20230621() {
 }
 
 func getAverages(nums []int, k int) []int {
+	if k == 0 {
+		return nums
+	}
+
+	div := k*2 + 1
 	size := len(nums)
 	const defaultAvg = -1
 	result := make([]int, size)
+	var sum int
 	for i := 0; i < size; i++ {
 		begin := i - k
 		end := (i + k) + 1
@@ -61,7 +67,13 @@ func getAverages(nums []int, k int) []int {
 			continue
 		}
 
-		result[i] = sumOfSlice(nums[begin:end]) / (end - begin)
+		if sum == 0 {
+			sum = sumOfSlice(nums[begin:end])
+		} else {
+			sum -= nums[begin-1]
+			sum += nums[end-1]
+		}
+		result[i] = sum / div
 	}
 
 	return result
