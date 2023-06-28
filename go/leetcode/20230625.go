@@ -49,36 +49,54 @@ func Run20230625() {
 	}
 }
 
-func countRoutes(locations []int, start int, finish int, fuel int) int {
-	ordered := make([]int, len(locations))
-	for i := 1; i < len(locations); i++ {
-		if finish == i {
-			continue
+func countRoutes(loc []int, start int, finish int, fuel int) int {
+	var dp func(int, int) uint64
+
+	abs := func(x int) int {
+		if x < 0 {
+			return -x
 		}
-		ordered[i] = locations[i]
+		return x
 	}
-	ordered[0] = locations[start]
-	ordered[len(ordered)-1] = locations[finish]
+	dp = func(i int, f int) uint64 {
+		if i == finish && f == 0 {
+			return 1
+		}
+		if f == 0 {
+			return 0
+		}
 
-	dp := make([][]int, len(ordered))
-	dp[0] = make([]int, fuel)
+		var a uint64 = 0
+		if i == finish {
+			a++
+		}
 
-	for i := 1; i < len(ordered); i++ {
-		dp[i] = make([]int, fuel)
-		for j := range dp[i] {
-			con := absInt(ordered[j-1] - ordered[j])
-
-			if 0 <= con {
-				continue
+		for li := range loc {
+			if li != i {
+				d := abs(loc[li] - loc[i])
+				if f >= d {
+					a += dp(li, f-d)
+				}
 			}
 		}
+		return a % 1000000007
 	}
+
+	dp = memo(dp)
+	return int(dp(start, fuel))
 }
 
-func absInt(x int) int {
-	if x < 0 {
-		return -x
-	}
+func memo(fn func(int, int) uint64) func(int, int) uint64 {
+	m := make(map[string]uint64)
+	d := func(i int, f int) uint64 {
+		k := fmt.Sprintf("%d-%d", i, f)
+		if v, ok := m[k]; ok {
+			return v
+		}
 
-	return x
+		v := fn(i, f)
+		m[k] = v
+		return v
+	}
+	return d
 }
