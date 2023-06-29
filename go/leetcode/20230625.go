@@ -50,8 +50,8 @@ func Run20230625() {
 }
 
 func countRoutes(loc []int, start int, finish int, fuel int) int {
-	var fn func(int, int) uint64
-	fn = func(index, remainingFuel int) uint64 {
+	var memoFn func(int, int) uint64
+	fn := func(index, remainingFuel int) uint64 {
 		if index == finish && remainingFuel == 0 {
 			return 1
 		}
@@ -69,7 +69,7 @@ func countRoutes(loc []int, start int, finish int, fuel int) int {
 			if li != index {
 				fuelConsumption := absInt(loc[li] - loc[index])
 				if remainingFuel >= fuelConsumption {
-					a += fn(li, remainingFuel-fuelConsumption)
+					a += memoFn(li, remainingFuel-fuelConsumption)
 				}
 			}
 		}
@@ -77,7 +77,7 @@ func countRoutes(loc []int, start int, finish int, fuel int) int {
 	}
 
 	memo := make(map[string]uint64)
-	memoFn := func(index int, remainingFuel int) uint64 {
+	memoFn = func(index int, remainingFuel int) uint64 {
 		memoKey := fmt.Sprintf("%d-%d", index, remainingFuel)
 		if value, ok := memo[memoKey]; ok {
 			return value
