@@ -50,53 +50,51 @@ func Run20230625() {
 }
 
 func countRoutes(loc []int, start int, finish int, fuel int) int {
-	var dp func(int, int) uint64
-
-	abs := func(x int) int {
-		if x < 0 {
-			return -x
-		}
-		return x
-	}
-	dp = func(i int, f int) uint64 {
-		if i == finish && f == 0 {
+	var fn func(int, int) uint64
+	fn = func(index, remainingFuel int) uint64 {
+		if index == finish && remainingFuel == 0 {
 			return 1
 		}
-		if f == 0 {
+
+		if remainingFuel == 0 {
 			return 0
 		}
 
-		var a uint64 = 0
-		if i == finish {
+		var a uint64
+		if index == finish {
 			a++
 		}
 
 		for li := range loc {
-			if li != i {
-				d := abs(loc[li] - loc[i])
-				if f >= d {
-					a += dp(li, f-d)
+			if li != index {
+				fuelConsumption := absInt(loc[li] - loc[index])
+				if remainingFuel >= fuelConsumption {
+					a += fn(li, remainingFuel-fuelConsumption)
 				}
 			}
 		}
-		return a % 1000000007
+		return a
 	}
 
-	dp = memo(dp)
-	return int(dp(start, fuel))
-}
-
-func memo(fn func(int, int) uint64) func(int, int) uint64 {
-	m := make(map[string]uint64)
-	d := func(i int, f int) uint64 {
-		k := fmt.Sprintf("%d-%d", i, f)
-		if v, ok := m[k]; ok {
-			return v
+	memo := make(map[string]uint64)
+	memoFn := func(index int, remainingFuel int) uint64 {
+		memoKey := fmt.Sprintf("%d-%d", index, remainingFuel)
+		if value, ok := memo[memoKey]; ok {
+			return value
 		}
 
-		v := fn(i, f)
-		m[k] = v
-		return v
+		value := fn(index, remainingFuel)
+		memo[memoKey] = value
+		return value
 	}
-	return d
+
+	return int(memoFn(start, fuel))
+}
+
+func absInt(x int) int {
+	if x < 0 {
+		return -x
+	}
+
+	return x
 }

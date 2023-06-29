@@ -5,5 +5,5 @@ import (
 )
 
 func main() {
-	leetcode.Run20230624()
+	leetcode.Run20230625()
 }
