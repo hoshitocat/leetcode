@@ -68,10 +68,37 @@ func Run20230630() {
 }
 
 func latestDayToCross(row int, col int, cells [][]int) int {
-	for i := range cells {
-		for start := range cells {
-			cells[start]
-		}
+	flooded := map[string]struct{}{}
+	for _, cell := range cells {
+		flooded[keyFunc(cell)] = struct{}{}
 	}
 	return 0
+}
+
+func isPossibleTopToBottom(flooded map[string]struct{}, row int, col int, cells [][]int) bool {
+	for r := 0; r < row; r++ {
+		if r+1 == row {
+			return true
+		}
+		for c := 0; c < col; c++ {
+			key := keyFunc(r, c)
+			if _, ok := flooded[key]; ok {
+				continue
+			}
+
+		}
+
+		if _, ok := flooded[key]; ok {
+			continue
+		}
+
+		if i+1 == row {
+			return true
+		}
+	}
+	return false
+}
+
+func keyFunc(s []int) string {
+	return fmt.Sprintf("%d-%d", s[0], s[1])
 }
