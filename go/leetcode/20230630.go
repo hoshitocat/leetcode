@@ -68,5 +68,10 @@ func Run20230630() {
 }
 
 func latestDayToCross(row int, col int, cells [][]int) int {
+	for i := range cells {
+		for start := range cells {
+			cells[start]
+		}
+	}
 	return 0
 }
