@@ -67,6 +67,8 @@ func Run20230630() {
 	}
 }
 
+var directions = []int{0, 1, 0, -1, 0}
+
 func latestDayToCross(row int, col int, cells [][]int) int {
 	flooded := map[string]struct{}{}
 	for _, cell := range cells {
