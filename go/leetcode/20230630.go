@@ -70,25 +70,17 @@ func Run20230630() {
 var directions = []int{0, 1, 0, -1, 0}
 
 func latestDayToCross(row int, col int, cells [][]int) int {
-	flooded := map[string]struct{}{}
-	for _, cell := range cells {
-		// 初期値が1スタートのため
-		r := cell[0] - 1
-		c := cell[1] - 1
-		flooded[keyFunc([]int{r, c})] = struct{}{}
-	}
-
-	var fn func(row, col int)
-	fn = func(currentRow, col int) {
-		for c := 0; c < col; c++ {
-			key := keyFunc([]int{currentRow, c})
-			if _, ok := flooded[key]; ok {
-				continue
-			}
-
-			fn(currentRow+1, col)
+	l, r, day := 0, len(cells), 0
+	for l <= r {
+		day = l + (r-l)/2
+		if isItPossibleToGetBottomLine() {
+			l = day + 1
+		} else {
+			r = day - 1
 		}
 	}
+
+	return r
 }
 
 func isPossibleTopToBottom(flooded map[string]struct{}, row int, col int, cells [][]int) bool {
