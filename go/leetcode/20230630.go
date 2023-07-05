@@ -70,42 +70,29 @@ func Run20230630() {
 var directions = []int{0, 1, 0, -1, 0}
 
 func latestDayToCross(row int, col int, cells [][]int) int {
-	l, r, day := 0, len(cells), 0
-	for l <= r {
-		day = l + (r-l)/2
-		if isItPossibleToGetBottomLine() {
-			l = day + 1
+	left := 1
+	right := len(cells)
+	ans := 0
+	for left <= right {
+		mid := left + (right-left)/2
+		if canWalk(cells, row, col, mid) {
+			ans = mid
+			left = mid + 1
 		} else {
-			r = day - 1
+			right = mid - 1
 		}
 	}
 
-	return r
+	return ans
 }
 
-func isPossibleTopToBottom(flooded map[string]struct{}, row int, col int, cells [][]int) bool {
-	for r := 0; r < row; r++ {
-		if r+1 == row {
-			return true
-		}
-		for c := 0; c < col; c++ {
-			key := keyFunc([]int{r, c})
-			if _, ok := flooded[key]; ok {
-				continue
-			}
-		}
-
-		if _, ok := flooded[key]; ok {
-			continue
-		}
-
-		if i+1 == row {
-			return true
-		}
+func canWalk(cells [][]int, row, col, dayAt int) bool {
+	grid := make([][]int, row)
+	for i := range grid {
+		grid[i] = make([]int, col)
 	}
-	return false
-}
+	for i := 0; i < dayAt; i++ {
+		grid[cells[i][0]-1][cells[i][1]-1] = 1
+	}
 
-func keyFunc(s []int) string {
-	return fmt.Sprintf("%d-%d", s[0], s[1])
 }
