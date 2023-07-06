@@ -108,9 +108,11 @@ func canWalk(cells [][]int, row, col, dayAt int) bool {
 		bfs := bfs[1:]
 		r := cur[0]
 		c := cur[1]
+		// NOTE: 一番下に到達したことを示す
 		if r == row-1 {
 			return true
 		}
+
 		for i := 0; i < 4; i++ {
 			nr := r + directions[i]
 			nc := c + directions[i+1]
