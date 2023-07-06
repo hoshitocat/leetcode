@@ -95,4 +95,27 @@ func canWalk(cells [][]int, row, col, dayAt int) bool {
 		grid[cells[i][0]-1][cells[i][1]-1] = 1
 	}
 
+	bfs := make([][]int, 0)
+	for c := 0; c < col; c++ {
+		if grid[0][c] == 0 {
+			bfs = append(bfs, []int{0, c})
+			grid[0][c] = 1
+		}
+	}
+
+	for len(bfs) > 0 {
+		cur := bfs[0]
+		bfs := bfs[1:]
+		r := cur[0]
+		c := cur[1]
+		if r == row-1 {
+			return true
+		}
+		for i := 0; i < 4; i++ {
+			nextR := r + directions[i]
+			nextC := c + directions[i+1]
+		}
+
+	}
+
 }
