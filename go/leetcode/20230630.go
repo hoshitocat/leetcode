@@ -112,10 +112,16 @@ func canWalk(cells [][]int, row, col, dayAt int) bool {
 			return true
 		}
 		for i := 0; i < 4; i++ {
-			nextR := r + directions[i]
-			nextC := c + directions[i+1]
+			nr := r + directions[i]
+			nc := c + directions[i+1]
+			if nr < 0 || nr == row || nc < 0 || nc == col || grid[nr][nc] == 1 {
+				continue
+			}
+			grid[nr][nc] = 1
+			bfs = append(bfs, []int{nr, nc})
 		}
 
 	}
 
+	return false
 }
