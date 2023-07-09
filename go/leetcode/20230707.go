@@ -39,5 +39,4 @@ func Run20230707() {
 }
 
 func maxConsecutiveAnswers(answerKey string, k int) int {
-
 }
