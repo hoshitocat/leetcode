@@ -6,31 +6,33 @@ using namespace std;
 class Solution {
   public:
     int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
+      int m, n; m = obstacleGrid.size(); n = obstacleGrid[0].size();
+
       vector<vector<int>> dp;
-      for (int i = 0; i < obstacleGrid.size(); i++) {
-        vector<int> val(obstacleGrid[i].size(), 0);
+      for (int i = 0; i < m; i++) {
+        vector<int> val(n, 0);
         dp.push_back(val);
       }
 
+      dp[0][0] = 1;
+      for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+          if (obstacleGrid[i][j] == 1) {
+            dp[i][j] = 0;
+            continue;
+          }
 
+          if (i != 0) {
+            dp[i][j] += dp[i-1][j];
+          }
 
-      for (int i = 0; i < dp.size(); i++) {
-        for (int j = 0; j < dp[i].size(); j++) {
-          pair<int, int> left = {i, j - 1};
-          pair<int, int> up = {i - 1, j};
-          // WIP
+          if (j != 0) {
+            dp[i][j] += dp[i][j-1];
+          }
         }
       }
 
-      // debug
-      for (int i = 0; i < obstacleGrid.size(); i++) {
-        for (int j = 0; j < obstacleGrid[i].size(); j++) {
-          cout << dp[i][j];
-        }
-        cout << endl;
-      }
-
-      return 0;
+      return dp[m-1][n-1];
     }
 };
 
