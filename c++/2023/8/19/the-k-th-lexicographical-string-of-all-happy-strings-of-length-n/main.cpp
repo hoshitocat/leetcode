@@ -16,17 +16,14 @@ class Solution {
         string tmp = q.front();
         q.pop();
 
-        if (tmp[tmp.size() - 1] == 'a') {
-          q.push(tmp + "b");
-          q.push(tmp + "c");
-        }
-        if (tmp[tmp.size() - 1] == 'b') {
+        if (tmp[tmp.size() - 1] != 'a') {
           q.push(tmp + "a");
-          q.push(tmp + "c");
         }
-        if (tmp[tmp.size() - 1] == 'c') {
-          q.push(tmp + "a");
+        if (tmp[tmp.size() - 1] != 'b') {
           q.push(tmp + "b");
+        }
+        if (tmp[tmp.size() - 1] != 'c') {
+          q.push(tmp + "c");
         }
       }
 
