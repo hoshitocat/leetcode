@@ -1,5 +1,6 @@
 #include<iostream>
 #include<vector>
+#include<stack>
 
 using namespace std;
 
@@ -29,10 +30,18 @@ class Solution {
 
   private:
     string toBinary(int n) {
-      string r;
+      if (n == 0) return "0";
+
+      stack<string> s;
       while (n != 0) {
-        r += (n % 2 == 0 ? "0" : "1");
+        s.push(n % 2 == 0 ? "0" : "1");
         n /= 2;
+      }
+
+      string r;
+      while (!s.empty()) {
+        r += s.top();
+        s.pop();
       }
 
       return r;
@@ -42,12 +51,13 @@ class Solution {
 int main() {
   Solution solution;
   vector<vector<int>> queries = {
-    {0, 5},
-    {1, 2},
+    {4, 2},
+    {3, 3},
   };
 
-  vector<vector<int>> result = solution.substringXorQueries("101101", queries);
-  for (int i = 0; i < result.size(); i++) {
-    printf("{ %d, %d }\n", result[0], result[1]);
+  vector<vector<int>> result;
+  result = solution.substringXorQueries("111010110", queries);
+  for (auto &r : result) {
+    printf("{ %d, %d }\n", r[0], r[1]);
   }
 }
