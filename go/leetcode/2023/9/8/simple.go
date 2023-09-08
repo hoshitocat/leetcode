@@ -3,19 +3,15 @@ package main
 import "github.com/davecgh/go-spew/spew"
 
 func canJump(nums []int) bool {
-	farthest := 0
-	length := len(nums)
-	for i, n := range nums {
-		if i+n > farthest {
-			farthest = i+n
-		}
+	target := len(nums) - 1
 
-		if n == 0 && farthest < length - 1 && i == farthest {
-			return false
+	for i := target - 1; 0 <= i; i-- {
+		if target <= i + nums[i] {
+			target = i
 		}
 	}
 
-	return true
+	return target == 0
 }
 
 func main() {
